@@ -1,0 +1,1 @@
+java -cp .;C:\Users\Admin\IdeaProjects\AKTK\grammar\antlr-4.2-complete.jar org.antlr.v4.Tool %*

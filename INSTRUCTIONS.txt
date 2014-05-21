@@ -1,0 +1,20 @@
+HOW TO START
+-------------
+
+1. You need to change the classpath in .bat files that looks like:
+   C:\Users\Admin\IdeaProjects\AKTK\grammar\antlr-4.2-complete.jar
+   to path, where you place the antlr-4.2-complete.jar file
+
+2. Open cmd and launch .bat files in this order:
+ antlr4
+ grun
+ generate
+
+3. Now test the grammar (aVene.g4) using this command:
+ test programm test_prog.vene
+
+
+Try to put some different codes to test_prog.vene to ensure that it works
+correctly. Now we have a mistake, that I can't solve yet. Feel free to help.
+
+Let me know, if you there are problems with this procedure or grammar mistakes.
