@@ -20,39 +20,41 @@ lause
     |   array
     |   list
     |   mixTypeArray
-    |   '{' lauseteJada '}'
     ;
 
 ifLause
-    :   ('ежели'|'ЕЖЕЛИ'|'Ежели') '('avaldis')' ('тогда'|'ТОГДА'|'Тогда') '{'lause'}' ('иначе'|'ИНАЧЕ'|'Иначе') '{'lause'}'
+    :   ('ежели'|'ЕЖЕЛИ'|'Ежели') '('avaldis')' ('тогда'|'ТОГДА'|'Тогда') '{'lauseteJada'}' ('иначе'|'ИНАЧЕ'|'Иначе') '{'lauseteJada'}'
     ;
 
 whileLause
-    :   ('доколе'|'ДОКОЛЕ'|'Доколе') '('avaldis')' '{'lause'}'
+    :   ('доколе'|'ДОКОЛЕ'|'Доколе') '('avaldis')' '{'lauseteJada'}'
     ;
 
 forLause
-    :   ('покаместъ'|'ПОКАМЕСТЪ'|'Покаместъ') '('avaldis ';' avaldis ';' avaldis')' '{'lause'}'
+    :   ('покаместъ'|'ПОКАМЕСТЪ'|'Покаместъ') '(' muutujaDeklaratsioon ';' avaldis ';' avaldis')' '{'lauseteJada'}'
     ;
 
 omistamine
     :   MuutujaNimi '=' avaldis
+//	|	array '=' '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? ']'
+//	|	list '=' '[|' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? '|]'
+//	|	mixTypeArray '=' '[' (Soneliteraal|Arvuliteraal|MuutujaNimi)? (',' Soneliteraal|',' Arvuliteraal|',' MuutujaNimi)* ']'
     ;
 
 muutujaDeklaratsioon
-    :   ('атрибут'|'АТРИБУТ'|'Атрибут') MuutujaNimi ('=' avaldis)?
+    :   ('аргумент'|'АРГУМЕНТ'|'Аргумент') MuutujaNimi ('=' avaldis)?
     ;
 
 array
-    :   ('сборище'|'СБОРИЩЕ'|'Сборище') '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*))? ']'
+    :   ('сборище'|'СБОРИЩЕ'|'Сборище') MuutujaNimi ('=' '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? ']')?
     ;
 
 list
-    :   ('перечень'|'ПЕРЕЧЕНЬ'|'Перечень') '[|' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*))? '|]'
+    :   ('перечень'|'ПЕРЕЧЕНЬ'|'Перечень') MuutujaNimi ('=' '[|' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? '|]')?
     ;
 
 mixTypeArray
-    :   ('скопище'|'СКОПИЩЕ'|'Скопище') '[' (Soneliteraal|Arvuliteraal)? (',' Soneliteraal|',' Arvuliteraal)* ']'
+    :   ('скопище'|'СКОПИЩЕ'|'Скопище') MuutujaNimi ('=' '[' (Soneliteraal|Arvuliteraal|MuutujaNimi)? (',' Soneliteraal|',' Arvuliteraal|',' MuutujaNimi)* ']')?
     ;
 
 avaldis
@@ -60,7 +62,7 @@ avaldis
     ;
 
 avaldis6
-    :   avaldis5 ('>'|'<'|'>='|'<='|'=='|'!=') avaldis5      # Vordlemine
+    :   avaldis5 ('>'|'<'|'>='|'<='|'=='|'!=') avaldis5 # Vordlemine
     |   avaldis5                                        # TriviaalneAvaldis6
     ;
 
@@ -76,6 +78,7 @@ avaldis4
 
 avaldis3
     :   avaldis3 ('*'|'/') avaldis2                     # KorrutamineJagamine
+	|	avaldis3 '%' avaldis2							# JagamineJagatisega
     |   avaldis2                                        # TriviaalneAvaldis3
     ;
 
