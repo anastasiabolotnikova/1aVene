@@ -1,7 +1,5 @@
 grammar aVene;
 
-CYRILLIC_RANGE : '\u0400'..'\u04FF' ;
-
 programm
     :   lauseteJada
     ;
@@ -33,18 +31,7 @@ whileLause
 forLause
     :   ('покаместъ'|'ПОКАМЕСТЪ'|'Покаместъ') '(' muutujaDeklaratsioon ';' avaldis ';' avaldis')' '{'lauseteJada'}'
     ;
-
-omistamine
-    :   MuutujaNimi '=' avaldis
-//	|	array '=' '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? ']'
-//	|	list '=' '[|' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? '|]'
-//	|	mixTypeArray '=' '[' (Soneliteraal|Arvuliteraal|MuutujaNimi)? (',' Soneliteraal|',' Arvuliteraal|',' MuutujaNimi)* ']'
-    ;
-
-muutujaDeklaratsioon
-    :   ('аргумент'|'АРГУМЕНТ'|'Аргумент') MuutujaNimi ('=' avaldis)?
-    ;
-
+	
 array
     :   ('сборище'|'СБОРИЩЕ'|'Сборище') MuutujaNimi ('=' '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? ']')?
     ;
@@ -55,6 +42,17 @@ list
 
 mixTypeArray
     :   ('скопище'|'СКОПИЩЕ'|'Скопище') MuutujaNimi ('=' '[' (Soneliteraal|Arvuliteraal|MuutujaNimi)? (',' Soneliteraal|',' Arvuliteraal|',' MuutujaNimi)* ']')?
+    ;
+
+omistamine
+    :   MuutujaNimi '=' avaldis
+	|	MuutujaNimi '=' '[' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? ']'
+	|	MuutujaNimi '=' '[|' ((Soneliteraal (',' Soneliteraal)*)| (Arvuliteraal (',' Arvuliteraal)*)| (MuutujaNimi (',' MuutujaNimi)*))? '|]'
+	|	MuutujaNimi '=' '[' (Soneliteraal|Arvuliteraal|MuutujaNimi)? (',' Soneliteraal|',' Arvuliteraal|',' MuutujaNimi)* ']'
+    ;
+
+muutujaDeklaratsioon
+    :   ('аргумент'|'АРГУМЕНТ'|'Аргумент') MuutujaNimi ('=' avaldis)?
     ;
 
 avaldis
