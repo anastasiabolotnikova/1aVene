@@ -144,14 +144,16 @@ public class Interpretator {
 
 
             if(intMap.containsKey(muutujanimi.toString())){
-                final int newVal;
+                int value;
                 if(tehe.equals("+=")){
-                    newVal = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+                    value = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
 
                 }
                 else{
-                    newVal = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+                    value = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
                 }
+
+                final int newVal = value;
                 intMap.remove(muutujanimi.toString());
                 intMap.put(muutujanimi.toString(),newVal);
                 Expression muutujavaartus = new Expression() {
