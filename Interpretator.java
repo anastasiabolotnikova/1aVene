@@ -2,7 +2,9 @@ import ee.ut.cs.akt.aktk.ast.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import sun.tools.tree.ForStatement;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.*;
 
 public class Interpretator {
@@ -74,6 +76,20 @@ public class Interpretator {
             Statement then = (Statement) parseTreeToAst(tree.getChild(3));
             Statement elsest = (Statement) parseTreeToAst(tree.getChild(5));
             return new IfStatement(condition,then,elsest);
+        }
+
+        else if(tree instanceof aVeneParser.WhileLauseContext){
+            Expression condition = (Expression) parseTreeToAst(tree.getChild(1));
+            Statement body = (Statement) parseTreeToAst(tree.getChild(2));
+            return new WhileStatement(condition,body);
+        }
+
+        else if(tree instanceof aVeneParser.ForLauseContext){
+            Statement declaration = (Statement) parseTreeToAst(tree.getChild(0));
+            Expression expression = (Expression) parseTreeToAst(tree.getChild(1));
+            Expression update = (Expression) parseTreeToAst(tree.getChild(2));
+            Statement body = (Statement) parseTreeToAst(tree.getChild(3));
+            //return new ForStatement(0,declaration,expression,update,body);
         }
         else if (tree instanceof aVeneParser.MuutujaDeklaratsioonContext) {
             // Muutuja deklaratsiooni esimene alluv (st. alluv 0) on võtmesõna "var",
@@ -167,6 +183,8 @@ public class Interpretator {
                 return new Assignment(muutujanimi.getName(), muutujavaartus);
             }
         }
+
+
 
         else {
             // Järele peaks olema jäänud (kui sa lisasid ülespoole ka puuduvad olulised juhtumid)
