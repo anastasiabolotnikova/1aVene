@@ -3,10 +3,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.HashMap;
+import java.util.*;
 
 public class Interpretator {
     static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
@@ -145,8 +142,9 @@ public class Interpretator {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression vaartus = (Expression) parseTreeToAst(tree.getChild(2));
 
+
             if(intMap.containsKey(muutujanimi.toString())){
-                int newVal;
+                final int newVal;
                 if(tehe.equals("+=")){
                     newVal = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
 
@@ -156,6 +154,15 @@ public class Interpretator {
                 }
                 intMap.remove(muutujanimi.toString());
                 intMap.put(muutujanimi.toString(),newVal);
+                Expression muutujavaartus = new Expression() {
+                    @Override
+                    public List<Object> getChildren() {
+                        List<Object> list = new ArrayList<Object>();
+                        list.set(0,newVal);
+                        return list;
+                    }
+                } ;
+                return new Assignment(muutujanimi.getName(), muutujavaartus);
             }
         }
 
