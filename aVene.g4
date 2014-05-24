@@ -87,15 +87,16 @@ avaldis2
 
 avaldis1
     :   MuutujaNimi '(' (avaldis (',' avaldis)*)? ')'   # FunktsiooniValjakutse
+	|	MuutujaNimi '[' Arvuliteraal ']'				# MassiiviKasutamine
     |   avaldis0                                        # TriviaalneAvaldis1
     ;
 
 avaldis0
-    :   MuutujaNimi     # MuutujaNimiR      // Lisasin nende margendite nimede
-    |   Arvuliteraal    # ArvuliteraalR     // loppu R, et need ei langeks kokku
-    |   Soneliteraal    # SoneliteraalR     // lekseri reeglite nimedega.
-    |   Boolean         # BooleanR
-    |   '(' avaldis ')' # Suluavaldis
+    :   MuutujaNimi     								# MuutujaNimiR      // Lisasin nende margendite nimede
+    |   Arvuliteraal    								# ArvuliteraalR     // loppu R, et need ei langeks kokku
+    |   Soneliteraal    								# SoneliteraalR     // lekseri reeglite nimedega.
+    |   Boolean         								# BooleanR
+    |   '(' avaldis ')' 								# Suluavaldis
     ;
 
 MuutujaNimi
