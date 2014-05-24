@@ -1,11 +1,11 @@
-import antlrgen.AKTKVisitor;
+
+import antlrgen.aVeneParser;
+import antlrgen.aVeneLexer;
+
 import ee.ut.cs.akt.aktk.ast.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-import antlrgen.AKTKParser;
-import antlrgen.AKTKLexer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,18 +15,19 @@ public class Interpretator {
 
     public static AstNode createAst(String program) {
         List<Statement> laused = new ArrayList<Statement>();
-        String[] statments = program.split(";");
-        for (int i=0;i<statments.length;i++){
-            ParseTree tree = createParseTree(statments[i]);
+        String[] statements = program.split(";");
+        for (int i=0;i<statements.length;i++){
+            ParseTree tree = createParseTree(statements[i]);
             AstNode ast = parseTreeToAst(tree);
             laused.add((Statement) ast);
         }
+
         return new Block(laused);
     }
 
     private static AstNode parseTreeToAst(ParseTree tree) {
 
-        if (tree instanceof AKTKParser.ArvuliteraalRContext) {
+        if (tree instanceof aVeneParser.ArvuliteraalRContext) {
             // tuleb arvestada, et tegemist võib olla täisarvu või murdarvuga
             if (tree.getText().contains(".")) {
                 return new FloatingPointLiteral(Double.parseDouble(tree.getText()));
@@ -35,10 +36,10 @@ public class Interpretator {
                 return new IntegerLiteral(Integer.parseInt(tree.getText()));
             }
         }
-        else if (tree instanceof AKTKParser.MuutujaNimiRContext){
+        else if (tree instanceof aVeneParser.MuutujaNimiRContext){
             return new Variable(tree.getText());
         }
-        else if (tree instanceof AKTKParser.FunktsiooniValjakutseContext){
+        else if (tree instanceof aVeneParser.FunktsiooniValjakutseContext){
             String funkName = tree.getChild(0).getText();
             List<Expression> args = new ArrayList<Expression>();
             if (tree.getChild(2)==null){
@@ -49,21 +50,21 @@ public class Interpretator {
                 return new FunctionCall(funkName, args);
             }
         }
-        else if (tree instanceof AKTKParser.SoneliteraalRContext) {
+        else if (tree instanceof aVeneParser.SoneliteraalRContext) {
             // arvesta, et sõneliteraalil on ümber jutumärgid, mis ei kuulu sõne sisu hulka
             String sone = tree.getChild(0).getText();
             return new StringLiteral(sone.substring(1,sone.length()-1));
         }
-        else if (tree instanceof AKTKParser.SuluavaldisContext) {
+        else if (tree instanceof aVeneParser.SuluavaldisContext) {
             // Selle tipu alluvad on alustav sulg, avaldis ja lõpetav sulg
             // NB! Alluvate nummerdamine algab 0-st
 
             // töötleme rekursiivselt sulgude sees oleva avaldise ja tagastame selle
             return parseTreeToAst(tree.getChild(1));
         }
-        else if (tree instanceof AKTKParser.KorrutamineJagamineContext
-                || tree instanceof AKTKParser.LiitmineLahutamineContext
-                || tree instanceof AKTKParser.VordlemineContext) {
+        else if (tree instanceof aVeneParser.KorrutamineJagamineContext
+                || tree instanceof aVeneParser.LiitmineLahutamineContext
+                || tree instanceof aVeneParser.VordlemineContext) {
             // kõik binaarsed operatsioonid saan käsitleda korraga
             String operaator = tree.getChild(1).getText();
             Expression vasakArgument = (Expression) parseTreeToAst(tree.getChild(0));
@@ -71,13 +72,13 @@ public class Interpretator {
 
             return new FunctionCall(operaator, Arrays.asList(vasakArgument, paremArgument));
         }
-        else if (tree instanceof AKTKParser.IfLauseContext){
+        else if (tree instanceof aVeneParser.IfLauseContext){
             Expression condition = (Expression) parseTreeToAst(tree.getChild(1));
             Statement then = (Statement) parseTreeToAst(tree.getChild(3));
             Statement elsest = (Statement) parseTreeToAst(tree.getChild(5));
             return new IfStatement(condition,then,elsest);
         }
-        else if (tree instanceof AKTKParser.MuutujaDeklaratsioonContext) {
+        else if (tree instanceof aVeneParser.MuutujaDeklaratsioonContext) {
             // Muutuja deklaratsiooni esimene alluv (st. alluv 0) on võtmesõna "var",
             // teine alluv on muutuja nimi
 
@@ -93,12 +94,12 @@ public class Interpretator {
                 return new VariableDeclaration(muutujanimi.getName(), null);
             }
         }
-        else if (tree instanceof AKTKParser.OmistamineContext) {
+        else if (tree instanceof aVeneParser.OmistamineContext) {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(2));
             return new Assignment(muutujanimi.getName(), muutujavaartus);
         }
-        else if (tree instanceof AKTKParser.LauseContext) {
+        else if (tree instanceof aVeneParser.LauseContext) {
             // grammatikast on näha, et lause võib olla ühe alluvaga,
             // (nt. ifLause, whileLause), mis on käsitletud mujal
             if (tree.getChildCount() == 1) {
@@ -133,9 +134,9 @@ public class Interpretator {
 
     private static ParseTree createParseTree(String program) {
         ANTLRInputStream antlrInput = new ANTLRInputStream(program);
-        AKTKLexer lexer = new AKTKLexer(antlrInput);
+        aVeneLexer lexer = new aVeneLexer(antlrInput);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        AKTKParser parser = new AKTKParser(tokens);
+        aVeneParser parser = new aVeneParser(tokens);
         ParseTree tree = parser.programm();
         //System.out.println(tree.toStringTree(parser));
         return tree;
@@ -147,15 +148,15 @@ public class Interpretator {
         // märgendile ArvuliteraalR.
         // Siin tuleb lihtsalt küsida selle tipu tekst ja teisendada
         // see täisarvuks
-        if (tree instanceof AKTKParser.ArvuliteraalRContext) {
+        if (tree instanceof aVeneParser.ArvuliteraalRContext) {
             return Integer.parseInt(tree.getText());
         }
 
         // Järgmise juhtumi mõistmiseks otsi grammatikast üles
         // sildid KorrutamineJagamine ja LiitmineLahutamine --
         // loodetavasti on siis arusaadav, miks siin just nii toimitakse.
-        else if (tree instanceof AKTKParser.KorrutamineJagamineContext
-                || tree instanceof AKTKParser.LiitmineLahutamineContext) {
+        else if (tree instanceof aVeneParser.KorrutamineJagamineContext
+                || tree instanceof aVeneParser.LiitmineLahutamineContext) {
 
             // küsin tipu alluvad
             ParseTree leftChild = tree.getChild(0);

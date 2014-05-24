@@ -1,12 +1,11 @@
-// Generated from aVene.g4 by ANTLR 4.2
+package antlrgen;// Generated from aVene.g4 by ANTLR 4.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
+
+import antlrgen.aVeneListener;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class aVeneParser extends Parser {
@@ -75,11 +74,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_programm; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterProgramm(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterProgramm(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitProgramm(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitProgramm(this);
 		}
 	}
 
@@ -116,11 +115,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_lauseteJada; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterLauseteJada(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterLauseteJada(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitLauseteJada(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitLauseteJada(this);
 		}
 	}
 
@@ -193,11 +192,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_lause; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterLause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitLause(this);
 		}
 	}
 
@@ -298,11 +297,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ifLause; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterIfLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterIfLause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitIfLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitIfLause(this);
 		}
 	}
 
@@ -366,11 +365,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_whileLause; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterWhileLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterWhileLause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitWhileLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitWhileLause(this);
 		}
 	}
 
@@ -425,11 +424,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_forLause; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterForLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterForLause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitForLause(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitForLause(this);
 		}
 	}
 
@@ -488,11 +487,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_array; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterArray(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterArray(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitArray(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitArray(this);
 		}
 	}
 
@@ -622,11 +621,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterList(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitList(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitList(this);
 		}
 	}
 
@@ -756,11 +755,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_mixTypeArray; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterMixTypeArray(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterMixTypeArray(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitMixTypeArray(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitMixTypeArray(this);
 		}
 	}
 
@@ -869,11 +868,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_omistamine; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterOmistamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterOmistamine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitOmistamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitOmistamine(this);
 		}
 	}
 
@@ -1132,11 +1131,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_muutujaDeklaratsioon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterMuutujaDeklaratsioon(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterMuutujaDeklaratsioon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitMuutujaDeklaratsioon(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitMuutujaDeklaratsioon(this);
 		}
 	}
 
@@ -1186,11 +1185,11 @@ public class aVeneParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_avaldis; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterAvaldis(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterAvaldis(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitAvaldis(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitAvaldis(this);
 		}
 	}
 
@@ -1235,11 +1234,11 @@ public class aVeneParser extends Parser {
 		public VordlemineContext(Avaldis6Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterVordlemine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterVordlemine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitVordlemine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitVordlemine(this);
 		}
 	}
 	public static class TriviaalneAvaldis6Context extends Avaldis6Context {
@@ -1249,11 +1248,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis6Context(Avaldis6Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis6(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis6(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis6(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis6(this);
 		}
 	}
 
@@ -1320,11 +1319,11 @@ public class aVeneParser extends Parser {
 		public LiitLahOmistamisegaContext(Avaldis5Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterLiitLahOmistamisega(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterLiitLahOmistamisega(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitLiitLahOmistamisega(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitLiitLahOmistamisega(this);
 		}
 	}
 	public static class TriviaalneAvaldis5Context extends Avaldis5Context {
@@ -1334,11 +1333,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis5Context(Avaldis5Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis5(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis5(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis5(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis5(this);
 		}
 	}
 
@@ -1427,11 +1426,11 @@ public class aVeneParser extends Parser {
 		public LiitmineLahutamineContext(Avaldis4Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterLiitmineLahutamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterLiitmineLahutamine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitLiitmineLahutamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitLiitmineLahutamine(this);
 		}
 	}
 	public static class TriviaalneAvaldis4Context extends Avaldis4Context {
@@ -1441,11 +1440,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis4Context(Avaldis4Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis4(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis4(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis4(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis4(this);
 		}
 	}
 
@@ -1534,11 +1533,11 @@ public class aVeneParser extends Parser {
 		public JagamineJagatisegaContext(Avaldis3Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterJagamineJagatisega(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterJagamineJagatisega(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitJagamineJagatisega(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitJagamineJagatisega(this);
 		}
 	}
 	public static class TriviaalneAvaldis3Context extends Avaldis3Context {
@@ -1548,11 +1547,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis3Context(Avaldis3Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis3(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis3(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis3(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis3(this);
 		}
 	}
 	public static class KorrutamineJagamineContext extends Avaldis3Context {
@@ -1565,11 +1564,11 @@ public class aVeneParser extends Parser {
 		public KorrutamineJagamineContext(Avaldis3Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterKorrutamineJagamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterKorrutamineJagamine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitKorrutamineJagamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitKorrutamineJagamine(this);
 		}
 	}
 
@@ -1671,11 +1670,11 @@ public class aVeneParser extends Parser {
 		public UnaarneMiinusContext(Avaldis2Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterUnaarneMiinus(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterUnaarneMiinus(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitUnaarneMiinus(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitUnaarneMiinus(this);
 		}
 	}
 	public static class TriviaalneAvaldis2Context extends Avaldis2Context {
@@ -1685,11 +1684,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis2Context(Avaldis2Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis2(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis2(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis2(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis2(this);
 		}
 	}
 
@@ -1750,11 +1749,11 @@ public class aVeneParser extends Parser {
 		public MassiiviKasutamineContext(Avaldis1Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterMassiiviKasutamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterMassiiviKasutamine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitMassiiviKasutamine(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitMassiiviKasutamine(this);
 		}
 	}
 	public static class FunktsiooniValjakutseContext extends Avaldis1Context {
@@ -1768,11 +1767,11 @@ public class aVeneParser extends Parser {
 		public FunktsiooniValjakutseContext(Avaldis1Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterFunktsiooniValjakutse(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterFunktsiooniValjakutse(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitFunktsiooniValjakutse(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitFunktsiooniValjakutse(this);
 		}
 	}
 	public static class TriviaalneAvaldis1Context extends Avaldis1Context {
@@ -1782,11 +1781,11 @@ public class aVeneParser extends Parser {
 		public TriviaalneAvaldis1Context(Avaldis1Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterTriviaalneAvaldis1(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterTriviaalneAvaldis1(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitTriviaalneAvaldis1(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitTriviaalneAvaldis1(this);
 		}
 	}
 
@@ -1876,11 +1875,11 @@ public class aVeneParser extends Parser {
 		public BooleanRContext(Avaldis0Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterBooleanR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterBooleanR(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitBooleanR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitBooleanR(this);
 		}
 	}
 	public static class SuluavaldisContext extends Avaldis0Context {
@@ -1890,11 +1889,11 @@ public class aVeneParser extends Parser {
 		public SuluavaldisContext(Avaldis0Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterSuluavaldis(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterSuluavaldis(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitSuluavaldis(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitSuluavaldis(this);
 		}
 	}
 	public static class SoneliteraalRContext extends Avaldis0Context {
@@ -1902,11 +1901,11 @@ public class aVeneParser extends Parser {
 		public SoneliteraalRContext(Avaldis0Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterSoneliteraalR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterSoneliteraalR(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitSoneliteraalR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitSoneliteraalR(this);
 		}
 	}
 	public static class ArvuliteraalRContext extends Avaldis0Context {
@@ -1914,11 +1913,11 @@ public class aVeneParser extends Parser {
 		public ArvuliteraalRContext(Avaldis0Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterArvuliteraalR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterArvuliteraalR(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitArvuliteraalR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitArvuliteraalR(this);
 		}
 	}
 	public static class MuutujaNimiRContext extends Avaldis0Context {
@@ -1926,11 +1925,11 @@ public class aVeneParser extends Parser {
 		public MuutujaNimiRContext(Avaldis0Context ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).enterMuutujaNimiR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).enterMuutujaNimiR(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof aVeneListener ) ((aVeneListener)listener).exitMuutujaNimiR(this);
+			if ( listener instanceof aVeneListener) ((aVeneListener)listener).exitMuutujaNimiR(this);
 		}
 	}
 

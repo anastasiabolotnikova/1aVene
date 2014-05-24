@@ -1,14 +1,15 @@
-// Generated from aVene.g4 by ANTLR 4.2
+package antlrgen;// Generated from aVene.g4 by ANTLR 4.2
+import antlrgen.aVeneParser;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
- * {@link aVeneParser}.
+ * {@link antlrgen.aVeneParser}.
  */
 public interface aVeneListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link aVeneParser#Vordlemine}.
+	 * Enter a parse tree produced by {@link antlrgen.aVeneParser#Vordlemine}.
 	 * @param ctx the parse tree
 	 */
 	void enterVordlemine(@NotNull aVeneParser.VordlemineContext ctx);
