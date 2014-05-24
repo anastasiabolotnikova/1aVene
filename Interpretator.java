@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.HashMap;
 
 public class Interpretator {
-   static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
-   static HashMap<String, String> stringMap = new HashMap<String, String>();
-   static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
+    static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
+    static HashMap<String, String> stringMap = new HashMap<String, String>();
+    static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
     public static AstNode createAst(String program) {
         List<Statement> laused = new ArrayList<Statement>();
         String[] statements = program.split(";");
@@ -93,10 +93,10 @@ public class Interpretator {
                 String type = muutujavaartus.toString();
                 // Check if boolean
                 if(type.equals("истина")||type.equals("ложь")){
-                        boolMap.put(muutujanimi.toString(),slavicBool(type));
+                    boolMap.put(muutujanimi.toString(),slavicBool(type));
                 }
                 // Check if string
-               else if(type.charAt(0)=='\"'){
+                else if(type.charAt(0)=='\"'){
                     stringMap.put(muutujanimi.toString(),type);
                 }
                 // Check if integer
@@ -114,29 +114,7 @@ public class Interpretator {
         else if (tree instanceof aVeneParser.OmistamineContext) {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(2));
-            // Search for integer variable
-            for(int i=0;i<intMap.size();i++){
-                if(intMap.containsKey(muutujanimi.toString())){
-                    intMap.remove(muutujanimi.toString());
-                    intMap.put(muutujanimi.toString(),Integer.parseInt(muutujavaartus.toString()));
-                }
-            }
-            // Search for string variable
-            for(int i=0;i<stringMap.size();i++){
-                if(stringMap.containsKey(muutujanimi.toString())){
-                    stringMap.remove(muutujanimi.toString());
-                    stringMap.put(muutujanimi.toString(),muutujavaartus.toString());
-                }
-            }
-            // Search for boolean variable
-            for(int i=0;i<boolMap.size();i++){
-                if(boolMap.containsKey(muutujanimi.toString())){
-                    boolMap.remove(muutujanimi.toString());
-                    boolMap.put(muutujanimi.toString(),slavicBool(muutujavaartus.toString()));
-
-                }
-            }
-
+            varSearch(muutujanimi,muutujavaartus);
             return new Assignment(muutujanimi.getName(), muutujavaartus);
         }
         else if (tree instanceof aVeneParser.LauseContext) {
@@ -167,14 +145,18 @@ public class Interpretator {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression vaartus = (Expression) parseTreeToAst(tree.getChild(2));
 
-         /*   if(tehe.equals("+=")){
-                return new FunctionCall("+", Arrays.asList(, vaartus));
+            if(intMap.containsKey(muutujanimi.toString())){
+                int newVal;
+                if(tehe.equals("+=")){
+                    newVal = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+
+                }
+                else{
+                    newVal = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+                }
+                intMap.remove(muutujanimi.toString());
+                intMap.put(muutujanimi.toString(),newVal);
             }
-
-            if(tehe.equals("-=")){
-                return new FunctionCall("-", Arrays.asList(vasakArgument,vaartus));
-            }*/
-
         }
 
         else {
@@ -270,11 +252,30 @@ public class Interpretator {
 
     public static boolean slavicBool(String string){
         if(string.equals("истина")){
-                return true;
+            return true;
         }
         else{
             return false;
         }
     }
 
+    public static void varSearch(Variable muutujanimi,Expression muutujavaartus){
+        // Search for integer variable
+        if(intMap.containsKey(muutujanimi.toString())){
+            intMap.remove(muutujanimi.toString());
+            intMap.put(muutujanimi.toString(),Integer.parseInt(muutujavaartus.toString()));
+        }
+
+        // Search for string variable
+        else if(stringMap.containsKey(muutujanimi.toString())){
+            stringMap.remove(muutujanimi.toString());
+            stringMap.put(muutujanimi.toString(),muutujavaartus.toString());
+        }
+
+        // Search for boolean variable
+        else if(boolMap.containsKey(muutujanimi.toString())){
+            boolMap.remove(muutujanimi.toString());
+            boolMap.put(muutujanimi.toString(),slavicBool(muutujavaartus.toString()));
+        }
+    }
 }
