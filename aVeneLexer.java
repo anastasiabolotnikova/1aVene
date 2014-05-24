@@ -1,4 +1,3 @@
-package antlrgen;// Generated from aVene.g4 by ANTLR 4.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.atn.*;

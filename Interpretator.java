@@ -1,7 +1,3 @@
-
-import antlrgen.aVeneParser;
-import antlrgen.aVeneLexer;
-
 import ee.ut.cs.akt.aktk.ast.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -10,9 +6,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
 
 public class Interpretator {
-
+   static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
+   static HashMap<String, String> stringMap = new HashMap<String, String>();
+   static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
     public static AstNode createAst(String program) {
         List<Statement> laused = new ArrayList<Statement>();
         String[] statements = program.split(";");
@@ -26,6 +25,7 @@ public class Interpretator {
     }
 
     private static AstNode parseTreeToAst(ParseTree tree) {
+
 
         if (tree instanceof aVeneParser.ArvuliteraalRContext) {
             // tuleb arvestada, et tegemist võib olla täisarvu või murdarvuga
@@ -89,6 +89,23 @@ public class Interpretator {
             Variable muutujanimi = new Variable(tree.getChild(1).getText());
             if (tree.getChild(2)!=null) {
                 Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(3));
+                // String for determining type of new variable
+                String type = muutujavaartus.toString();
+                // Check if boolean
+                if(type.equals("истина")||type.equals("ложь")){
+                        boolMap.put(muutujanimi.toString(),slavicBool(type));
+                }
+                // Check if string
+               else if(type.charAt(0)=='\"'){
+                    stringMap.put(muutujanimi.toString(),type);
+                }
+                // Check if integer
+                else if(isInteger(type)){
+                    intMap.put(muutujanimi.toString(),Integer.parseInt(type));
+                }
+                else{
+                    // handle error
+                }
                 return new VariableDeclaration(muutujanimi.getName(), muutujavaartus);
             }else{
                 return new VariableDeclaration(muutujanimi.getName(), null);
@@ -97,6 +114,29 @@ public class Interpretator {
         else if (tree instanceof aVeneParser.OmistamineContext) {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(2));
+            // Search for integer variable
+            for(int i=0;i<intMap.size();i++){
+                if(intMap.containsKey(muutujanimi.toString())){
+                    intMap.remove(muutujanimi.toString());
+                    intMap.put(muutujanimi.toString(),Integer.parseInt(muutujavaartus.toString()));
+                }
+            }
+            // Search for string variable
+            for(int i=0;i<stringMap.size();i++){
+                if(stringMap.containsKey(muutujanimi.toString())){
+                    stringMap.remove(muutujanimi.toString());
+                    stringMap.put(muutujanimi.toString(),muutujavaartus.toString());
+                }
+            }
+            // Search for boolean variable
+            for(int i=0;i<boolMap.size();i++){
+                if(boolMap.containsKey(muutujanimi.toString())){
+                    boolMap.remove(muutujanimi.toString());
+                    boolMap.put(muutujanimi.toString(),slavicBool(muutujavaartus.toString()));
+
+                }
+            }
+
             return new Assignment(muutujanimi.getName(), muutujavaartus);
         }
         else if (tree instanceof aVeneParser.LauseContext) {
@@ -122,6 +162,21 @@ public class Interpretator {
             }
         }
 
+        else if (tree instanceof aVeneParser.Avaldis5Context){
+            String tehe = tree.getChild(1).getText();
+            Variable muutujanimi = new Variable(tree.getChild(0).getText());
+            Expression vaartus = (Expression) parseTreeToAst(tree.getChild(2));
+
+         /*   if(tehe.equals("+=")){
+                return new FunctionCall("+", Arrays.asList(, vaartus));
+            }
+
+            if(tehe.equals("-=")){
+                return new FunctionCall("-", Arrays.asList(vasakArgument,vaartus));
+            }*/
+
+        }
+
         else {
             // Järele peaks olema jäänud (kui sa lisasid ülespoole ka puuduvad olulised juhtumid)
             // ainult need tiputüübid, millel on ainult
@@ -130,6 +185,7 @@ public class Interpretator {
             // tippe tarvis ja me liigume kohe nende alluva juurde
             return parseTreeToAst(tree.getChild(0));
         }
+        return null;
     }
 
     private static ParseTree createParseTree(String program) {
@@ -199,6 +255,25 @@ public class Interpretator {
         else {
             throw new UnsupportedOperationException
                     ("Selle tiputüübi väärtustamine ei ole praegu toetatud");
+        }
+
+    }
+    public static boolean isInteger(String string){
+        try{
+            Integer.parseInt(string);
+            return true;
+        }
+        catch( Exception e){
+            return false;
+        }
+    }
+
+    public static boolean slavicBool(String string){
+        if(string.equals("истина")){
+                return true;
+        }
+        else{
+            return false;
         }
     }
 
