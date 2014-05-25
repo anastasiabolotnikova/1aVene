@@ -15,6 +15,7 @@ public class Main {
         ParseTree tree;
         tree = Interpretator.createParseTree(content);
         Interpretator.parseTreeToAst(tree);
+        //System.out.println(Interpretator.evaluate(tree));
         //System.out.println(Interpretator.run(tree));
     }
 

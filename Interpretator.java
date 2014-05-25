@@ -51,12 +51,18 @@ public class Interpretator {
             if (funkName.equals("вещать")){
                 String argument = tree.getChild(2).getText();
                 // Argument is double - print argument
+                //System.out.println(doubleMap.get(argument));
                 if(isDouble(argument)){
                     System.out.println(argument);
                 }
                 // Argument is variable - print variable value
-                else if(argument.matches("[а-я]")){
+                else if(argument.matches("[а-яА-Я][а-яА-Я0-1_]*")){
+                    //System.out.println(doubleMap.get(argument));
                     if(doubleMap.containsKey(argument)){
+                        //double oldDouble = doubleMap.get(argument);
+                        //double newDouble = Math.round(oldDouble*1000)/1000;
+                        //System.out.println(""+oldDouble);
+                        //System.out.println("Yep");
                         System.out.println(doubleMap.get(argument));
                     }
                     else if(stringMap.containsKey(argument)){
@@ -67,9 +73,9 @@ public class Interpretator {
                     }
                 }
                 // Argument is list element - print element value
-                // aTODO implement printing if array element given
-                /* else if(){
-                }*/
+                else if(argument.contains("[") && argument.contains("]")){
+
+                }
                 //Argument is string - print string
                 else if(argument.charAt(0)=='\"'){
                     System.out.println(argument.substring(1,argument.length()-1));
@@ -143,17 +149,21 @@ public class Interpretator {
             Variable muutujanimi = new Variable(tree.getChild(1).getText());
             if (tree.getChild(2)!=null) {
                 Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(3));
+
                 // String for determining type of new variable
-                String type = muutujavaartus.toString();
+                String type = ((aVeneParser.MuutujaDeklaratsioonContext) tree).avaldis().avaldis6().getText();
+                //System.out.println(muutujanimi.getName());
 
                 if(variableTypeRecognizer(type)==1){
-                    doubleMap.put(muutujanimi.toString(),Double.parseDouble(type));
+                    double res = evaluate(((aVeneParser.MuutujaDeklaratsioonContext) tree).avaldis().avaldis6());
+                    //System.out.println(""+res);
+                    doubleMap.put(muutujanimi.getName(),res);
                 }
                 else if(variableTypeRecognizer(type)==2){
-                    stringMap.put(muutujanimi.toString(),type);
+                    stringMap.put(muutujanimi.getName(),type);
                 }
                 else if(variableTypeRecognizer(type)==3){
-                    boolMap.put(muutujanimi.toString(),slavicBool(type));
+                    boolMap.put(muutujanimi.getName(),slavicBool(type));
                 }
                 else{
                     // handle error
@@ -243,8 +253,8 @@ public class Interpretator {
         }
 
         else if(tree instanceof aVeneParser.LauseteJadaContext){
-            for(int i=0;tree.getChild(i)!=null;i++){
-                return parseTreeToAst(tree.getChild(i));
+            for(int i=0;i<((aVeneParser.LauseteJadaContext) tree).lause().size();i++){
+                parseTreeToAst(((aVeneParser.LauseteJadaContext) tree).lause(i));
             }
         }
 
@@ -327,86 +337,14 @@ public class Interpretator {
         return tree;
     }
 
-    public static String name;
-    public static int index;
-    static String run(ParseTree tree){
-
-        if(tree instanceof aVeneParser.MassiiviKasutamineContext){
-            name = ((aVeneParser.MassiiviKasutamineContext) tree).MuutujaNimi().getText();
-            String ind = ((aVeneParser.MassiiviKasutamineContext) tree).Arvuliteraal().getText();
-            index = Integer.parseInt(ind);
-        }
-        else if (tree instanceof aVeneParser.FunktsiooniValjakutseContext) {
-            String funkName = tree.getChild(0).getText();
-            if (funkName.equals("вещать")) {
-                String argument = tree.getChild(2).getText();
-                // Argument is double or string - print argument
-                if (isDouble(argument) || (tree.getChild(1).equals("\"") && tree.getChild(3).equals("\""))) {
-                    return argument;
-                }
-                else if(argument.contains("[") && argument.contains("]")){
-                    if(doubleArrayListMap.containsKey(name)){
-                        return doubleArrayListMap.get(name).get(index).toString();
-                    } else if (stringArrayListMap.containsKey(name)){
-                        return stringArrayListMap.get(name).get(index);
-                    } else if (booleanArrayListMap.containsKey(name)){
-                        return booleanArrayListMap.get(name).get(index).toString();
-                    } else if(mixedArrayListMap.containsKey(name)){
-                        return mixedArrayListMap.get(name).get(index).toString();
-                    } else {
-                        String a="No such array";
-                        return a;
-                    }
-                } else if(argument.contains("[|") && argument.contains("|]")){
-                    if(doubleListMap.containsKey(name)){
-                        return doubleListMap.get(name).get(index).toString();
-                    } else if (stringListMap.containsKey(name)){
-                        return stringListMap.get(name).get(index);
-                    } else if (booleanListMap.containsKey(name)){
-                        return booleanListMap.get(name).get(index).toString();
-                    } else {
-                        String a="No such list";
-                        return a;
-                    }
-                }
-                // Argument is variable - print variable value
-                else {
-                    if (doubleMap.containsKey(argument)) {
-                        return doubleMap.get(argument).toString();
-                    } else if (stringMap.containsKey(argument)) {
-                        return stringMap.get(argument);
-                    } else if (boolMap.containsKey(argument)) {
-                        return boolMap.get(argument).toString();
-                    }
-                }
-                // Argument is list element - print element value
-                // aTODO implement printing if array element given
-                /* else if(){
-                }*/
-            }
-        } else if(tree instanceof aVeneParser.ProgrammContext){
-            return run(((aVeneParser.ProgrammContext) tree).lauseteJada());
-        } else if(tree instanceof aVeneParser.LauseteJadaContext){
-            for(int i=0;i<((aVeneParser.LauseteJadaContext) tree).lause().size();i++){
-                return run(((aVeneParser.LauseteJadaContext) tree).lause(i));
-            }
-        } else if(tree instanceof aVeneParser.LauseContext){
-            return run(((aVeneParser.LauseContext) tree).avaldis());
-        } else if(tree instanceof aVeneParser.AvaldisContext){
-            return run(((aVeneParser.AvaldisContext) tree).avaldis6());
-        } else if(tree instanceof aVeneParser.MuutujaDeklaratsioonContext){
-            return run(((aVeneParser.MuutujaDeklaratsioonContext) tree).avaldis());
-        }
-        return "END";
-    }
-    static int evaluate(ParseTree tree) {
+    static double evaluate(ParseTree tree) {
 
         // Tipp tüübiga ArvuliteraalRContext vastab grammatikas
         // märgendile ArvuliteraalR.
         // Siin tuleb lihtsalt küsida selle tipu tekst ja teisendada
         // see täisarvuks
-        if (tree instanceof aVeneParser.ArvuliteraalRContext) {
-            return Integer.parseInt(tree.getText());
+        if (tree instanceof aVeneParser.ArvuliteraalRContext || tree instanceof aVeneParser.UnaarneMiinusContext) {
+            return Double.parseDouble(tree.getText());
         }
 
         // Järgmise juhtumi mõistmiseks otsi grammatikast üles
@@ -422,8 +360,8 @@ public class Interpretator {
             ParseTree rightChild = tree.getChild(2);
 
             // väärtustan rekursiivselt
-            int leftValue = evaluate(leftChild);
-            int rightValue = evaluate(rightChild);
+            double leftValue = evaluate(leftChild);
+            double rightValue = evaluate(rightChild);
 
             // väärtustan terve operatsiooni
             switch (operator) {
