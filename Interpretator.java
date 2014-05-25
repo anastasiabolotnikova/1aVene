@@ -2,19 +2,17 @@ import ee.ut.cs.akt.aktk.ast.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import sun.tools.tree.ForStatement;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.*;
 
 public class Interpretator {
-    static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
+    static HashMap<String, Double> doubleMap = new HashMap<String, Double>();
     static HashMap<String, String> stringMap = new HashMap<String, String>();
     static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
-    static HashMap<String, ArrayList<Integer>> integerArrayListMap  = new HashMap<String, ArrayList<Integer>>();
+    static HashMap<String, ArrayList<Double>> doubleArrayListMap  = new HashMap<String, ArrayList<Double>>();
     static HashMap<String, ArrayList<String>> stringArrayListMap = new HashMap<String, ArrayList<String>>();
-    static HashMap<String, ArrayList<String>> variableArrayListMap = new HashMap<String, ArrayList<String>>();
     static HashMap<String, ArrayList<Boolean>> booleanArrayListMap = new HashMap<String, ArrayList<Boolean>>();
+    static HashMap<String, ArrayList<Object>> mixedArrayListMap = new HashMap<String, ArrayList<Object>>();
 
 
     public static AstNode createAst(String program) {
@@ -109,15 +107,13 @@ public class Interpretator {
                 Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(3));
                 // String for determining type of new variable
                 String type = muutujavaartus.toString();
-                // 1 for integer
+
                 if(variableTypeRecognizer(type)==1){
-                    intMap.put(muutujanimi.toString(),Integer.parseInt(type));
+                    doubleMap.put(muutujanimi.toString(),Double.parseDouble(type));
                 }
-                // 2 for string
                 else if(variableTypeRecognizer(type)==2){
                     stringMap.put(muutujanimi.toString(),type);
                 }
-                // 3 for boolean
                 else if(variableTypeRecognizer(type)==3){
                     boolMap.put(muutujanimi.toString(),slavicBool(type));
                 }
@@ -163,19 +159,19 @@ public class Interpretator {
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression vaartus = (Expression) parseTreeToAst(tree.getChild(2));
 
-            if(intMap.containsKey(muutujanimi.toString())){
-                int value;
+            if(doubleMap.containsKey(muutujanimi.toString())){
+                double value;
                 if(tehe.equals("+=")){
-                    value = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+                    value = doubleMap.get(muutujanimi.toString()) + Double.parseDouble(vaartus.toString());
 
                 }
                 else{
-                    value = intMap.get(muutujanimi.toString())+Integer.parseInt(vaartus.toString());
+                    value = doubleMap.get(muutujanimi.toString()) - Double.parseDouble(vaartus.toString());
                 }
 
-                final int newVal = value;
-                intMap.remove(muutujanimi.toString());
-                intMap.put(muutujanimi.toString(),newVal);
+                final double newVal = value;
+                doubleMap.remove(muutujanimi.toString());
+                doubleMap.put(muutujanimi.toString(),newVal);
                 Expression muutujavaartus = new Expression() {
                     @Override
                     public List<Object> getChildren() {
@@ -193,19 +189,29 @@ public class Interpretator {
                 // Determine type of first element and add given array to apropriate type of array map.
                 if(variableTypeRecognizer(firstArrayElement)==1){
                     // Create integer array
-                    ArrayList<Integer> list = new ArrayList<Integer>();
+                    ArrayList<Double> list = new ArrayList<Double>();
                     // Fill an array
                     for(int i = 2;tree.getChild(i)!=null;i++){
-                        list.set(i-2,Integer.parseInt(tree.getChild(i).getText()));
+                        if(variableTypeRecognizer(tree.getChild(i).getText())!=1){
+                            // Given array has not only doubles
+                        }
+                        else {
+                            list.set(i - 2, Double.parseDouble(tree.getChild(i).getText()));
+                        }
                     }
-                    integerArrayListMap.put(arrayName,list);
+                    doubleArrayListMap.put(arrayName,list);
                 }
                 else if(variableTypeRecognizer(firstArrayElement)==2){
                     // Create string array
                     ArrayList<String> list = new ArrayList<String>();
                     // Fill an array
                     for(int i = 2;tree.getChild(i)!=null;i++){
-                        list.set(i-2,tree.getChild(i).getText());
+                        if(variableTypeRecognizer(tree.getChild(i).getText())!=2){
+                            // Given array has not only strings
+                        }
+                        else {
+                            list.set(i - 2, tree.getChild(i).getText());
+                        }
                     }
                     stringArrayListMap.put(arrayName,list);
                 }
@@ -215,25 +221,30 @@ public class Interpretator {
                     ArrayList<Boolean> list = new ArrayList<Boolean>();
                     // Fill an array
                     for(int i = 2;tree.getChild(i)!=null;i++){
-                        list.set(i-2,slavicBool(tree.getChild(i).getText()));
+                        if(variableTypeRecognizer(tree.getChild(i).getText())!=3){
+                            // Given array has not only booleans
+                        }
+                        else {
+                            list.set(i - 2, slavicBool(tree.getChild(i).getText()));
+                        }
                     }
                     booleanArrayListMap.put(arrayName,list);
                 }
 
                 else {
-                    // Create variable array (contains variables as strings)
-                    ArrayList<String> list = new ArrayList<String>();
-                    // Fill an array
-                    for(int i = 2;tree.getChild(i)!=null;i++){
-                        list.set(i-2,tree.getChild(i).getText());
-                    }
-                    variableArrayListMap.put(arrayName,list);
+                    // Create variable array
                 }
             }
 
         }
 
-
+        else if (tree instanceof aVeneParser.MixTypeArrayContext){
+            ArrayList<Object> list = new ArrayList<Object>();
+            for(int i = 2;tree.getChild(i)!=null;i++) {
+                list.set(i - 2, Double.parseDouble(tree.getChild(i).getText()));
+            }
+            mixedArrayListMap.put(tree.getChild(1).getText(),list);
+        }
 
         else {
             // Järele peaks olema jäänud (kui sa lisasid ülespoole ka puuduvad olulised juhtumid)
@@ -317,9 +328,9 @@ public class Interpretator {
 
     }
 
-    public static boolean isInteger(String string){
+    public static boolean isDouble(String string){
         try{
-            Integer.parseInt(string);
+            Double.parseDouble(string);
             return true;
         }
         catch( Exception e){
@@ -337,11 +348,12 @@ public class Interpretator {
         }
     }
 
+
     public static void varSearch(Variable muutujanimi,Expression muutujavaartus){
-        // Search for integer variable
-        if(intMap.containsKey(muutujanimi.toString())){
-            intMap.remove(muutujanimi.toString());
-            intMap.put(muutujanimi.toString(),Integer.parseInt(muutujavaartus.toString()));
+        // Search for double variable
+        if(doubleMap.containsKey(muutujanimi.toString())){
+            doubleMap.remove(muutujanimi.toString());
+            doubleMap.put(muutujanimi.toString(), Double.parseDouble(muutujavaartus.toString()));
         }
 
         // Search for string variable
@@ -358,12 +370,12 @@ public class Interpretator {
     }
 
     // This method gets variable value and returns integer:
-    // 1 - for integer
+    // 1 - for double
     // 2 - for string
     // 3 - for booolean
     public static int variableTypeRecognizer(String varValue){
-        // Check if integer
-        if(isInteger(varValue)){
+        // Check if double
+        if(isDouble(varValue)){
             return 1;
         }
         // Check if string
