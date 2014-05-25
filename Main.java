@@ -14,7 +14,8 @@ public class Main {
 
         ParseTree tree;
         tree = Interpretator.createParseTree(content);
-        Interpretator.evaluate(tree);
+        Interpretator.parseTreeToAst(tree);
+        //System.out.println(Interpretator.run(tree));
     }
 
     public static String getFileContent(String filename) throws FileNotFoundException {

@@ -327,6 +327,78 @@ public class Interpretator {
         return tree;
     }
 
+    public static String name;
+    public static int index;
+    static String run(ParseTree tree){
+
+        if(tree instanceof aVeneParser.MassiiviKasutamineContext){
+            name = ((aVeneParser.MassiiviKasutamineContext) tree).MuutujaNimi().getText();
+            String ind = ((aVeneParser.MassiiviKasutamineContext) tree).Arvuliteraal().getText();
+            index = Integer.parseInt(ind);
+        }
+        else if (tree instanceof aVeneParser.FunktsiooniValjakutseContext) {
+            String funkName = tree.getChild(0).getText();
+            if (funkName.equals("вещать")) {
+                String argument = tree.getChild(2).getText();
+                // Argument is double or string - print argument
+                if (isDouble(argument) || (tree.getChild(1).equals("\"") && tree.getChild(3).equals("\""))) {
+                    return argument;
+                }
+                else if(argument.contains("[") && argument.contains("]")){
+                    if(doubleArrayListMap.containsKey(name)){
+                        return doubleArrayListMap.get(name).get(index).toString();
+                    } else if (stringArrayListMap.containsKey(name)){
+                        return stringArrayListMap.get(name).get(index);
+                    } else if (booleanArrayListMap.containsKey(name)){
+                        return booleanArrayListMap.get(name).get(index).toString();
+                    } else if(mixedArrayListMap.containsKey(name)){
+                        return mixedArrayListMap.get(name).get(index).toString();
+                    } else {
+                        String a="No such array";
+                        return a;
+                    }
+                } else if(argument.contains("[|") && argument.contains("|]")){
+                    if(doubleListMap.containsKey(name)){
+                        return doubleListMap.get(name).get(index).toString();
+                    } else if (stringListMap.containsKey(name)){
+                        return stringListMap.get(name).get(index);
+                    } else if (booleanListMap.containsKey(name)){
+                        return booleanListMap.get(name).get(index).toString();
+                    } else {
+                        String a="No such list";
+                        return a;
+                    }
+                }
+                // Argument is variable - print variable value
+                else {
+                    if (doubleMap.containsKey(argument)) {
+                        return doubleMap.get(argument).toString();
+                    } else if (stringMap.containsKey(argument)) {
+                        return stringMap.get(argument);
+                    } else if (boolMap.containsKey(argument)) {
+                        return boolMap.get(argument).toString();
+                    }
+                }
+                // Argument is list element - print element value
+                // aTODO implement printing if array element given
+                /* else if(){
+                }*/
+            }
+        } else if(tree instanceof aVeneParser.ProgrammContext){
+            return run(((aVeneParser.ProgrammContext) tree).lauseteJada());
+        } else if(tree instanceof aVeneParser.LauseteJadaContext){
+            for(int i=0;i<((aVeneParser.LauseteJadaContext) tree).lause().size();i++){
+                return run(((aVeneParser.LauseteJadaContext) tree).lause(i));
+            }
+        } else if(tree instanceof aVeneParser.LauseContext){
+            return run(((aVeneParser.LauseContext) tree).avaldis());
+        } else if(tree instanceof aVeneParser.AvaldisContext){
+            return run(((aVeneParser.AvaldisContext) tree).avaldis6());
+        } else if(tree instanceof aVeneParser.MuutujaDeklaratsioonContext){
+            return run(((aVeneParser.MuutujaDeklaratsioonContext) tree).avaldis());
+        }
+        return "END";
+    }
     static int evaluate(ParseTree tree) {
 
         // Tipp tüübiga ArvuliteraalRContext vastab grammatikas
