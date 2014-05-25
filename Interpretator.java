@@ -11,6 +11,12 @@ public class Interpretator {
     static HashMap<String, Integer> intMap = new HashMap<String, Integer>();
     static HashMap<String, String> stringMap = new HashMap<String, String>();
     static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
+    static HashMap<String, ArrayList<Integer>> integerArrayListMap  = new HashMap<String, ArrayList<Integer>>();
+    static HashMap<String, ArrayList<String>> stringArrayListMap = new HashMap<String, ArrayList<String>>();
+    static HashMap<String, ArrayList<String>> variableArrayListMap = new HashMap<String, ArrayList<String>>();
+    static HashMap<String, ArrayList<Boolean>> booleanArrayListMap = new HashMap<String, ArrayList<Boolean>>();
+
+
     public static AstNode createAst(String program) {
         List<Statement> laused = new ArrayList<Statement>();
         String[] statements = program.split(";");
@@ -24,8 +30,6 @@ public class Interpretator {
     }
 
     private static AstNode parseTreeToAst(ParseTree tree) {
-
-
         if (tree instanceof aVeneParser.ArvuliteraalRContext) {
             // tuleb arvestada, et tegemist võib olla täisarvu või murdarvuga
             if (tree.getText().contains(".")) {
@@ -90,6 +94,7 @@ public class Interpretator {
             Expression update = (Expression) parseTreeToAst(tree.getChild(2));
             Statement body = (Statement) parseTreeToAst(tree.getChild(3));
             //return new ForStatement(0,declaration,expression,update,body);
+
         }
         else if (tree instanceof aVeneParser.MuutujaDeklaratsioonContext) {
             // Muutuja deklaratsiooni esimene alluv (st. alluv 0) on võtmesõna "var",
@@ -104,17 +109,17 @@ public class Interpretator {
                 Expression muutujavaartus = (Expression) parseTreeToAst(tree.getChild(3));
                 // String for determining type of new variable
                 String type = muutujavaartus.toString();
-                // Check if boolean
-                if(type.equals("истина")||type.equals("ложь")){
-                    boolMap.put(muutujanimi.toString(),slavicBool(type));
+                // 1 for integer
+                if(variableTypeRecognizer(type)==1){
+                    intMap.put(muutujanimi.toString(),Integer.parseInt(type));
                 }
-                // Check if string
-                else if(type.charAt(0)=='\"'){
+                // 2 for string
+                else if(variableTypeRecognizer(type)==2){
                     stringMap.put(muutujanimi.toString(),type);
                 }
-                // Check if integer
-                else if(isInteger(type)){
-                    intMap.put(muutujanimi.toString(),Integer.parseInt(type));
+                // 3 for boolean
+                else if(variableTypeRecognizer(type)==3){
+                    boolMap.put(muutujanimi.toString(),slavicBool(type));
                 }
                 else{
                     // handle error
@@ -153,11 +158,10 @@ public class Interpretator {
             }
         }
 
-        else if (tree instanceof aVeneParser.Avaldis5Context){
+        else if (tree instanceof aVeneParser.LiitLahOmistamisegaContext){
             String tehe = tree.getChild(1).getText();
             Variable muutujanimi = new Variable(tree.getChild(0).getText());
             Expression vaartus = (Expression) parseTreeToAst(tree.getChild(2));
-
 
             if(intMap.containsKey(muutujanimi.toString())){
                 int value;
@@ -182,6 +186,51 @@ public class Interpretator {
                 } ;
                 return new Assignment(muutujanimi.getName(), muutujavaartus);
             }
+            else if(tree instanceof aVeneParser.ArrayContext){
+                String arrayName = tree.getChild(1).getText();
+                String firstArrayElement = tree.getChild(2).getText();
+
+                // Determine type of first element and add given array to apropriate type of array map.
+                if(variableTypeRecognizer(firstArrayElement)==1){
+                    // Create integer array
+                    ArrayList<Integer> list = new ArrayList<Integer>();
+                    // Fill an array
+                    for(int i = 2;tree.getChild(i)!=null;i++){
+                        list.set(i-2,Integer.parseInt(tree.getChild(i).getText()));
+                    }
+                    integerArrayListMap.put(arrayName,list);
+                }
+                else if(variableTypeRecognizer(firstArrayElement)==2){
+                    // Create string array
+                    ArrayList<String> list = new ArrayList<String>();
+                    // Fill an array
+                    for(int i = 2;tree.getChild(i)!=null;i++){
+                        list.set(i-2,tree.getChild(i).getText());
+                    }
+                    stringArrayListMap.put(arrayName,list);
+                }
+
+                else if(variableTypeRecognizer(firstArrayElement)==3){
+                    // Create boolean array
+                    ArrayList<Boolean> list = new ArrayList<Boolean>();
+                    // Fill an array
+                    for(int i = 2;tree.getChild(i)!=null;i++){
+                        list.set(i-2,slavicBool(tree.getChild(i).getText()));
+                    }
+                    booleanArrayListMap.put(arrayName,list);
+                }
+
+                else {
+                    // Create variable array (contains variables as strings)
+                    ArrayList<String> list = new ArrayList<String>();
+                    // Fill an array
+                    for(int i = 2;tree.getChild(i)!=null;i++){
+                        list.set(i-2,tree.getChild(i).getText());
+                    }
+                    variableArrayListMap.put(arrayName,list);
+                }
+            }
+
         }
 
 
@@ -267,6 +316,7 @@ public class Interpretator {
         }
 
     }
+
     public static boolean isInteger(String string){
         try{
             Integer.parseInt(string);
@@ -277,6 +327,7 @@ public class Interpretator {
         }
     }
 
+    // This method gets boolean variable value and determines is't true/false
     public static boolean slavicBool(String string){
         if(string.equals("истина")){
             return true;
@@ -303,6 +354,29 @@ public class Interpretator {
         else if(boolMap.containsKey(muutujanimi.toString())){
             boolMap.remove(muutujanimi.toString());
             boolMap.put(muutujanimi.toString(),slavicBool(muutujavaartus.toString()));
+        }
+    }
+
+    // This method gets variable value and returns integer:
+    // 1 - for integer
+    // 2 - for string
+    // 3 - for booolean
+    public static int variableTypeRecognizer(String varValue){
+        // Check if integer
+        if(isInteger(varValue)){
+            return 1;
+        }
+        // Check if string
+        else if(varValue.charAt(0)=='\"'){
+            return 2;
+        }
+        // Check if boolean
+        else if(varValue.equals("истина")||varValue.equals("ложь")){
+            return 3;
+        }
+        else{
+            // handle error
+            return 0;
         }
     }
 }
