@@ -48,13 +48,44 @@ public class Interpretator {
         }
         else if (tree instanceof aVeneParser.FunktsiooniValjakutseContext){
             String funkName = tree.getChild(0).getText();
-            List<Expression> args = new ArrayList<Expression>();
-            if (tree.getChild(2)==null){
-                return new FunctionCall(funkName, args);
+            if (funkName.equals("вещать")){
+                String argument = tree.getChild(2).getText();
+                // Argument is double - print argument
+                if(isDouble(argument)){
+                    System.out.println(argument);
+                }
+                // Argument is variable - print variable value
+                else if(argument.matches("[а-я]")){
+                    if(doubleMap.containsKey(argument)){
+                        System.out.println(doubleMap.get(argument));
+                    }
+                    else if(stringMap.containsKey(argument)){
+                        System.out.println(stringMap.get(argument));
+                    }
+                    else if(boolMap.containsKey(argument)){
+                        System.out.println(boolMap.get(argument));
+                    }
+                }
+                // Argument is list element - print element value
+                // aTODO implement printing if array element given
+                /* else if(){
+                }*/
+                //Argument is string - print string
+                else if(argument.charAt(0)=='\"'){
+                    System.out.println(argument.substring(1,argument.length()-1));
+                }
+
+
+
             }
             else {
-                args.add((Expression) parseTreeToAst(tree.getChild(2)));
-                return new FunctionCall(funkName, args);
+                List<Expression> args = new ArrayList<Expression>();
+                if (tree.getChild(2) == null) {
+                    return new FunctionCall(funkName, args);
+                } else {
+                    args.add((Expression) parseTreeToAst(tree.getChild(2)));
+                    return new FunctionCall(funkName, args);
+                }
             }
         }
         else if (tree instanceof aVeneParser.SoneliteraalRContext) {
@@ -98,6 +129,7 @@ public class Interpretator {
             Expression expression = (Expression) parseTreeToAst(tree.getChild(1));
             Expression update = (Expression) parseTreeToAst(tree.getChild(2));
             Statement body = (Statement) parseTreeToAst(tree.getChild(3));
+            // aTODO implement usage of given declaration,expression etc.
             //return new ForStatement(0,declaration,expression,update,body);
         }
         else if (tree instanceof aVeneParser.MuutujaDeklaratsioonContext) {
@@ -236,29 +268,42 @@ public class Interpretator {
 
         else if(tree instanceof aVeneParser.MassiiviKasutamineContext){
             int elementNumber = Integer.parseInt(tree.getChild(2).toString());
-
+            Object value;
             if(doubleListMap.containsKey(tree.getChild(0).toString())){
-                double value = doubleListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = doubleListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(doubleArrayListMap.containsKey(tree.getChild(0).toString())){
-                double value = doubleArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = doubleArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(stringListMap.containsKey(tree.getChild(0).toString())){
-                String value = stringListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = stringListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(stringArrayListMap.containsKey(tree.getChild(0).toString())) {
-                String value = stringArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = stringArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(mixedArrayListMap.containsKey(tree.getChild(0).toString())){
-                Object value = mixedArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = mixedArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(booleanListMap.containsKey(tree.getChild(0).toString())){
-                boolean value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+                value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
             else if(booleanArrayListMap.containsKey(tree.getChild(0).toString())){
-               boolean value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+               value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
             }
-          // return value;
+            else{
+                value = null;
+            }
+
+            final Object val = value;
+            Expression expression = new Expression() {
+                @Override
+                public List<Object> getChildren() {
+                    List<Object> list = new ArrayList<Object>();
+                    list.set(0,val);
+                    return list;
+                }
+            };
+
         }
 
         else {
