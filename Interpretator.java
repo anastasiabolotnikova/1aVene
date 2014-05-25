@@ -6,14 +6,19 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.*;
 
 public class Interpretator {
+
     static HashMap<String, Double> doubleMap = new HashMap<String, Double>();
     static HashMap<String, String> stringMap = new HashMap<String, String>();
     static HashMap<String, Boolean> boolMap = new HashMap<String, Boolean>();
+
     static HashMap<String, ArrayList<Double>> doubleArrayListMap  = new HashMap<String, ArrayList<Double>>();
     static HashMap<String, ArrayList<String>> stringArrayListMap = new HashMap<String, ArrayList<String>>();
     static HashMap<String, ArrayList<Boolean>> booleanArrayListMap = new HashMap<String, ArrayList<Boolean>>();
     static HashMap<String, ArrayList<Object>> mixedArrayListMap = new HashMap<String, ArrayList<Object>>();
 
+    static HashMap<String, List<Double>> doubleListMap = new HashMap<String, List<Double>>();
+    static HashMap<String, List<String>> stringListMap = new HashMap<String, List<String>>();
+    static HashMap<String, List<Boolean>> booleanListMap = new HashMap<String, List<Boolean>>();
 
     public static AstNode createAst(String program) {
         List<Statement> laused = new ArrayList<Statement>();
@@ -92,7 +97,6 @@ public class Interpretator {
             Expression update = (Expression) parseTreeToAst(tree.getChild(2));
             Statement body = (Statement) parseTreeToAst(tree.getChild(3));
             //return new ForStatement(0,declaration,expression,update,body);
-
         }
         else if (tree instanceof aVeneParser.MuutujaDeklaratsioonContext) {
             // Muutuja deklaratsiooni esimene alluv (st. alluv 0) on võtmesõna "var",
@@ -185,55 +189,13 @@ public class Interpretator {
             else if(tree instanceof aVeneParser.ArrayContext){
                 String arrayName = tree.getChild(1).getText();
                 String firstArrayElement = tree.getChild(2).getText();
+                arrayOrListFiller(1,arrayName,firstArrayElement,tree);
+            }
 
-                // Determine type of first element and add given array to apropriate type of array map.
-                if(variableTypeRecognizer(firstArrayElement)==1){
-                    // Create integer array
-                    ArrayList<Double> list = new ArrayList<Double>();
-                    // Fill an array
-                    for(int i = 2;tree.getChild(i)!=null;i++){
-                        if(variableTypeRecognizer(tree.getChild(i).getText())!=1){
-                            // Given array has not only doubles
-                        }
-                        else {
-                            list.set(i - 2, Double.parseDouble(tree.getChild(i).getText()));
-                        }
-                    }
-                    doubleArrayListMap.put(arrayName,list);
-                }
-                else if(variableTypeRecognizer(firstArrayElement)==2){
-                    // Create string array
-                    ArrayList<String> list = new ArrayList<String>();
-                    // Fill an array
-                    for(int i = 2;tree.getChild(i)!=null;i++){
-                        if(variableTypeRecognizer(tree.getChild(i).getText())!=2){
-                            // Given array has not only strings
-                        }
-                        else {
-                            list.set(i - 2, tree.getChild(i).getText());
-                        }
-                    }
-                    stringArrayListMap.put(arrayName,list);
-                }
-
-                else if(variableTypeRecognizer(firstArrayElement)==3){
-                    // Create boolean array
-                    ArrayList<Boolean> list = new ArrayList<Boolean>();
-                    // Fill an array
-                    for(int i = 2;tree.getChild(i)!=null;i++){
-                        if(variableTypeRecognizer(tree.getChild(i).getText())!=3){
-                            // Given array has not only booleans
-                        }
-                        else {
-                            list.set(i - 2, slavicBool(tree.getChild(i).getText()));
-                        }
-                    }
-                    booleanArrayListMap.put(arrayName,list);
-                }
-
-                else {
-                    // Create variable array
-                }
+            else if(tree instanceof aVeneParser.ListContext){
+                String arrayName = tree.getChild(1).getText();
+                String firstArrayElement = tree.getChild(2).getText();
+                arrayOrListFiller(2,arrayName,firstArrayElement,tree);
             }
 
         }
@@ -389,6 +351,75 @@ public class Interpretator {
         else{
             // handle error
             return 0;
+        }
+    }
+
+    // This method fills array map or list map depending on int:
+    // 1 - fills array map
+    // 2 - fills list map
+    public static void arrayOrListFiller(int type, String arrayName, String firstArrayElement,ParseTree tree){
+        if(variableTypeRecognizer(firstArrayElement)==1){
+            // Create integer array
+            ArrayList<Double> list = new ArrayList<Double>();
+            // Fill an array
+            for(int i = 2;tree.getChild(i)!=null;i++){
+                if(variableTypeRecognizer(tree.getChild(i).getText())!=1){
+                    // Given array has not only doubles
+                }
+                else {
+                    list.set(i - 2, Double.parseDouble(tree.getChild(i).getText()));
+                }
+            }
+            if(type==1){
+                doubleArrayListMap.put(arrayName,list);
+            }
+            else {
+                doubleListMap.put(arrayName,list);
+            }
+
+        }
+        else if(variableTypeRecognizer(firstArrayElement)==2){
+            // Create string array
+            ArrayList<String> list = new ArrayList<String>();
+            // Fill an array
+            for(int i = 2;tree.getChild(i)!=null;i++){
+                if(variableTypeRecognizer(tree.getChild(i).getText())!=2){
+                    // Given array has not only strings
+                }
+                else {
+                    list.set(i - 2, tree.getChild(i).getText());
+                }
+            }
+            if(type==1){
+                stringArrayListMap.put(arrayName,list);
+            }
+            else {
+                stringListMap.put(arrayName,list);
+            }
+        }
+
+        else if(variableTypeRecognizer(firstArrayElement)==3){
+            // Create boolean array
+            ArrayList<Boolean> list = new ArrayList<Boolean>();
+            // Fill an array
+            for(int i = 2;tree.getChild(i)!=null;i++){
+                if(variableTypeRecognizer(tree.getChild(i).getText())!=3){
+                    // Given array has not only booleans
+                }
+                else {
+                    list.set(i - 2, slavicBool(tree.getChild(i).getText()));
+                }
+            }
+            if(type==1){
+                booleanArrayListMap.put(arrayName,list);
+            }
+            else {
+                booleanListMap.put(arrayName,list);
+            }
+        }
+
+        else {
+            // Create variable array
         }
     }
 }
