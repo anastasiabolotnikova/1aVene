@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.*;
 
 public class Interpretator {
@@ -32,7 +33,7 @@ public class Interpretator {
         return new Block(laused);
     }
 
-    private static AstNode parseTreeToAst(ParseTree tree) {
+    public static AstNode parseTreeToAst(ParseTree tree) {
         if (tree instanceof aVeneParser.ArvuliteraalRContext) {
             // tuleb arvestada, et tegemist võib olla täisarvu või murdarvuga
             if (tree.getText().contains(".")) {
@@ -70,7 +71,8 @@ public class Interpretator {
         }
         else if (tree instanceof aVeneParser.KorrutamineJagamineContext
                 || tree instanceof aVeneParser.LiitmineLahutamineContext
-                || tree instanceof aVeneParser.VordlemineContext) {
+                || tree instanceof aVeneParser.VordlemineContext
+                || tree instanceof aVeneParser.JagamineJagatisegaContext) {
             // kõik binaarsed operatsioonid saan käsitleda korraga
             String operaator = tree.getChild(1).getText();
             Expression vasakArgument = (Expression) parseTreeToAst(tree.getChild(0));
@@ -208,6 +210,57 @@ public class Interpretator {
             mixedArrayListMap.put(tree.getChild(1).getText(),list);
         }
 
+        else if(tree instanceof aVeneParser.LauseteJadaContext){
+            for(int i=0;tree.getChild(i)!=null;i++){
+                return parseTreeToAst(tree.getChild(i));
+            }
+        }
+
+        else if(tree instanceof aVeneParser.UnaarneMiinusContext){
+            if(isDouble(tree.getChild(1).toString())){
+             final double oldValue = Double.parseDouble(tree.getChild(1).toString());
+             Expression newValue = new Expression() {
+                 @Override
+                 public List<Object> getChildren() {
+                     List<Object> list = new ArrayList<Object>();
+                     list.set(0,oldValue*(-1));
+                     return list;
+                 }
+             };
+                return new Assignment(tree.getChild(1).toString(), newValue);
+            }
+            else{
+                //not numeric
+            }
+        }
+
+        else if(tree instanceof aVeneParser.MassiiviKasutamineContext){
+            int elementNumber = Integer.parseInt(tree.getChild(2).toString());
+
+            if(doubleListMap.containsKey(tree.getChild(0).toString())){
+                double value = doubleListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(doubleArrayListMap.containsKey(tree.getChild(0).toString())){
+                double value = doubleArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(stringListMap.containsKey(tree.getChild(0).toString())){
+                String value = stringListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(stringArrayListMap.containsKey(tree.getChild(0).toString())) {
+                String value = stringArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(mixedArrayListMap.containsKey(tree.getChild(0).toString())){
+                Object value = mixedArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(booleanListMap.containsKey(tree.getChild(0).toString())){
+                boolean value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+            else if(booleanArrayListMap.containsKey(tree.getChild(0).toString())){
+               boolean value = booleanArrayListMap.get(tree.getChild(0).toString()).get(elementNumber);
+            }
+          // return value;
+        }
+
         else {
             // Järele peaks olema jäänud (kui sa lisasid ülespoole ka puuduvad olulised juhtumid)
             // ainult need tiputüübid, millel on ainult
@@ -219,7 +272,7 @@ public class Interpretator {
         return null;
     }
 
-    private static ParseTree createParseTree(String program) {
+    public static ParseTree createParseTree(String program) {
         ANTLRInputStream antlrInput = new ANTLRInputStream(program);
         aVeneLexer lexer = new aVeneLexer(antlrInput);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -243,7 +296,8 @@ public class Interpretator {
         // sildid KorrutamineJagamine ja LiitmineLahutamine --
         // loodetavasti on siis arusaadav, miks siin just nii toimitakse.
         else if (tree instanceof aVeneParser.KorrutamineJagamineContext
-                || tree instanceof aVeneParser.LiitmineLahutamineContext) {
+                || tree instanceof aVeneParser.LiitmineLahutamineContext
+                || tree instanceof aVeneParser.JagamineJagatisegaContext) {
 
             // küsin tipu alluvad
             ParseTree leftChild = tree.getChild(0);
@@ -264,6 +318,8 @@ public class Interpretator {
                     return leftValue * rightValue;
                 case '/':
                     return leftValue / rightValue;
+                case '%':
+                    return leftValue % rightValue;
                 default:
                     throw new RuntimeException("Tundmatu operaator");
             }
@@ -329,6 +385,7 @@ public class Interpretator {
             boolMap.remove(muutujanimi.toString());
             boolMap.put(muutujanimi.toString(),slavicBool(muutujavaartus.toString()));
         }
+
     }
 
     // This method gets variable value and returns integer:
